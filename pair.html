@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ROBIN - GET SESSION</title>
+  <title>PAIR CODE</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <style>
     body {
@@ -13,233 +13,214 @@
       height: 100vh;
       margin: 0;
       background-color: #141414;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
       font-family: 'Arial', sans-serif;
-      color: #fff;
+      color: #fff; /* Set the text color to white */
     }
+
     .container {
       display: flex;
       flex-direction: column;
       align-items: center;
     }
+
     .box {
-      width: 320px;
-      min-height: 350px;
+      width: 300px;
+      height: 330px;
       padding: 20px;
+      position: relative;
       text-align: center;
-      background-color: #a20000;
+      background-color: #a20000; /* Update background color */
       border-radius: 10px;
+      transform: perspective(1000px) rotateY(0deg);
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+      position: relative;
     }
-    .tab-buttons {
-        display: flex;
-        justify-content: center;
-        margin-bottom: 20px;
-        border-radius: 8px;
-        background-color: #5e0000;
-        padding: 5px;
+
+    #text {
+      color: #ffffff; /* Set the text color to black (#000) */
     }
-    .tab-button {
-        flex: 1;
-        padding: 10px;
-        border: none;
-        background-color: transparent;
-        color: white;
-        cursor: pointer;
-        font-size: 16px;
-        border-radius: 5px;
-        transition: background-color 0.3s;
+
+    .input-container input {
+      color: #ffffff; /* Set the text color to black (#000) */
     }
-    .tab-button.active {
-        background-color: #c40000;
-        font-weight: bold;
+
+    .centered-text {
+      color: #ffffff; /* Set the text color to black (#000) */
     }
-    .tab-content {
-        display: none;
-    }
-    .tab-content.active {
-        display: block;
-    }
+
     .input-container {
       display: flex;
-      background: #ffffff;
+      background: #ffffff; /* Update background color */
       border-radius: 1rem;
       padding: 0.3rem;
       gap: 0.3rem;
-      margin-top: 15px;
+      max-width: 300px;
+      width: 100%;
     }
+
     .input-container input {
       border-radius: 0.8rem 0 0 0.8rem;
-      background: #000000;
-      width: 100%;
+      background: #000000; /* Update background color */
+      width: 89%;
+      flex-basis: 75%;
       padding: 1rem;
       border: none;
-      border-left: 2px solid #075e54;
-      color: #ecf0f1;
+      border-left: 2px solid #075e54; /* Update border color */
+      color: #ecf0f1; /* Set text color to light grey */
+      transition: all 0.2s ease-in-out;
     }
+
+    .input-container input:focus {
+      border-left: 2px solid #075e54;
+      outline: none;
+      box-shadow: inset 13px 13px 10px #075e54, inset -13px -13px 10px #2c3e50;
+    }
+
     .input-container button {
+      flex-basis: 25%;
       padding: 1rem;
-      background: #25d366;
+      background: #25d366; /* Update background color */
       font-weight: 900;
+      letter-spacing: 0.3rem;
+      text-transform: uppercase;
       color: white;
       border: none;
+      width: 100%;
       border-radius: 0 1rem 1rem 0;
       transition: all 0.2s ease-in-out;
-      cursor: pointer;
     }
-    #qr-code-display {
-        background-color: white;
-        padding: 15px;
-        border-radius: 10px;
-        margin: 15px auto;
-        width: fit-content;
-        min-width: 200px;
-        min-height: 200px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+
+    .input-container button:hover {
+      background: #2980b9; /* Update background color on hover */
     }
-    #qr-code-display img { display: block; }
-    #generate-qr-btn {
-        background-color: #25d366;
-        color: white;
-        border: none;
-        padding: 12px 20px;
-        border-radius: 8px;
-        font-size: 16px;
-        cursor: pointer;
-        margin-top: 15px;
+
+    #waiting-message {
+      color: #ffffff; /* Set text color to light grey */
+      margin-top: 10px;
     }
-    #generate-qr-btn:disabled {
-        background-color: #555;
-        cursor: not-allowed;
+
+    @media (max-width: 500px) {
+      .input-container {
+        flex-direction: column;
+      }
+
+      .input-container input {
+        border-radius: 0.8rem;
+      }
+
+      .input-container button {
+        padding: 1rem;
+        border-radius: 0.8rem;
+      }
     }
-    #qr-status { margin-top: 10px; font-weight: bold; }
-    #pair-result { margin-top: 10px; }
+
+    .centered-text {
+      text-align: center;
+    }
+
+    /* Add styles for the loading spinner */
+    #loading-spinner {
+      display: none;
+      color: white;
+      margin-top: 10px;
+    }
+
+    .fa-spinner {
+      animation: spin 2s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="main">
       <div class="box" id="box">
-
-        <div class="tab-buttons">
-            <button class="tab-button active" onclick="showTab('pair')">Pair Code</button>
-            <button class="tab-button" onclick="showTab('qr')">QR Scan</button>
+        <div id="text">
+          <i class="fa fa-user"></i>
+          <p>
+            <h3 class="centered-text">Link Robin with phone number</h3>
+            <br>
+            <h6>🔢 Enter your number with country code. ROBIN WEB PAIR</h6>
+            <div class="input-container">
+              <input placeholder="+94704xxxxxx" type="number" id="number" placeholder="❗ Enter your phone number with country code, ROBIN WEB PAIR" name="">
+              <button id="submit">Submit ROBIN</button>
+            </div>
+            <!-- Add the loading spinner -->
+            <div id="loading-spinner">
+              <i class="fas fa-spinner fa-spin"></i>
+            </div>
+            <br>
+            <br>
+            <main id="pair"></main>
+          </p>
         </div>
-
-        <div id="pair-content" class="tab-content active">
-          <i class="fa fa-mobile-alt fa-2x"></i>
-          <h3>Link with Phone Number</h3>
-          <h6>Enter your number with country code.</h6>
-          <div class="input-container">
-            <input placeholder="+94704xxxxxx" type="text" id="number" name="">
-            <button id="submit">Get Code</button>
-          </div>
-          <div id="loading-spinner-pair" style="display:none; margin-top: 10px;">
-            <i class="fas fa-spinner fa-spin"></i> Getting Code...
-          </div>
-          <main id="pair-result"></main>
-        </div>
-
-        <div id="qr-content" class="tab-content">
-            <i class="fa fa-qrcode fa-2x"></i>
-            <h3>Link with QR Code</h3>
-            <h6>Scan the code with your phone's WhatsApp.</h6>
-            <div id="qr-code-display"></div>
-            <div id="qr-status">Click the button to generate a QR code.</div>
-            <button id="generate-qr-btn">Generate QR</button>
-        </div>
-
       </div>
     </div>
   </div>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.0.0-alpha.1/axios.min.js"></script>
-  <script src="/socket.io/socket.io.js"></script>
+  <script
+  src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.0.0-alpha.1/axios.min.js"
+  ></script>
   <script>
-    function showTab(tabName) {
-        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-        document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
-        document.getElementById(`${tabName}-content`).classList.add('active');
-        document.querySelector(`button[onclick="showTab('${tabName}')"]`).classList.add('active');
-    }
+    
+    let a = document.getElementById("pair");
+    let b = document.getElementById("submit");
+    let c = document.getElementById("number");
+    let box = document.getElementById("box");
 
-    // --- PAIRING CODE LOGIC ---
-    const pairResult = document.getElementById("pair-result");
-    const submitBtn = document.getElementById("submit");
-    const numberInput = document.getElementById("number");
-    const pairSpinner = document.getElementById('loading-spinner-pair');
-
-    async function copyCode() {
+    async function Copy() {
+      let text = document.getElementById("copy").innerText;
       let obj = document.getElementById("copy");
-      let textToCopy = obj.innerText.replace('CODE: ', '');
-      await navigator.clipboard.writeText(textToCopy);
-      obj.innerHTML = "✔️ COPIED";
-      setTimeout(() => { obj.innerHTML = `CODE: <span style="color:black;font-weight:bold">${textToCopy}</span>`; }, 1500);
+      await navigator.clipboard.writeText(obj.innerText.replace('CODE: ', ''));
+      obj.innerText = "✔️ COPIED";
+      obj.style = "color:blue;font-weight:bold";
+      obj.size = "5";
+      setTimeout(() => {
+        obj.innerText = text;
+        obj.style = "color:white;font-weight-bold";
+        obj.size = "5";
+      }, 500);
     }
 
-    submitBtn.addEventListener("click", async (e) => {
+    b.addEventListener("click", async (e) => {
       e.preventDefault();
-      const phoneNumber = numberInput.value.replace(/[^0-9]/g, "");
-      if (!phoneNumber) {
-        pairResult.innerHTML = '<b style="color:white;">❗Enter your whatsapp number with country code.</b>';
-      } else if (phoneNumber.length < 10) {
-        pairResult.innerHTML = '<b style="color:white;">❗Invalid number format. Please try again.</b>';
+      if (!c.value) {
+        a.innerHTML = '<a style="color:black;font-weight:bold">❗Enter your whatsapp number with country code.</a><br><br>';
+      } else if (c.value.replace(/[^0-9]/g, "").length < 11) {
+        a.innerHTML = '<a style="color:black;font-weight:bold">❗Invalid number format. Please try again.</a><br><br>';
       } else {
-        pairSpinner.style.display = 'block';
-        pairResult.innerHTML = '';
-        try {
-            let { data } = await axios(`/code?number=${phoneNumber}`);
-            let code = data.code || "❗ Service Unavailable";
-            pairResult.innerHTML = `<div id="copy" onclick="copyCode()" style="cursor:pointer;color:white;font-weight:bold" title="Click to copy">CODE: <span style="color:black;font-weight:bold">${code}</span></div><br><small>Enter this code in WhatsApp on your primary phone.</small>`;
-        } catch (error) {
-            pairResult.innerHTML = '<b style="color:white;">❗ Error connecting to server. Please try again.</b>';
-        } finally {
-            pairSpinner.style.display = 'none';
-        }
+        const bc = c.value.replace(/[^0-9]/g, "");
+        let bb = "";
+        let bbc = "";
+        const cc = bc.split('');
+        cc.map(a => {
+          bbc += a;
+          if (bbc.length == 3) {
+            bb += " " + a;
+          } else if (bbc.length == 8) {
+            bb += " " + a;
+          } else {
+            bb += a;
+          }
+        });
+        c.type = "text";
+        c.value = "+" + bb;
+        c.style = "color:white;font-size:20px";
+        // Show the loading spinner
+        document.getElementById("loading-spinner").style.display = "block";
+        a.innerHTML = ''; // Clear the previous content
+        let { data } = await axios(`/code?number=${bc}`);
+        let code = data.code || "❗ Service Unavailable";
+        a.innerHTML = '<font id="copy" onclick="Copy()" style="color:blue;font-weight:bold" size="5">CODE: <span style="color:black;font-weight:bold">' + code + '</span></font><br><br><br>';
+        // Hide the loading spinner when the process is complete
+        document.getElementById("loading-spinner").style.display = "none";
       }
-    });
-
-    // --- QR SCAN LOGIC ---
-    const generateQrBtn = document.getElementById('generate-qr-btn');
-    const qrCodeDisplay = document.getElementById('qr-code-display');
-    const qrStatus = document.getElementById('qr-status');
-    let socket;
-
-    generateQrBtn.addEventListener('click', () => {
-        if (socket) socket.disconnect();
-        socket = io({transports: ['websocket']});
-
-        qrCodeDisplay.innerHTML = '<i class="fas fa-spinner fa-spin fa-3x"></i>';
-        qrStatus.innerText = 'Generating QR Code...';
-        generateQrBtn.disabled = true;
-
-        socket.emit('get-qr');
-
-        socket.on('qr', (qrDataURL) => {
-            qrCodeDisplay.innerHTML = `<img src="${qrDataURL}" alt="QR Code">`;
-            qrStatus.innerText = 'Please scan the QR code with WhatsApp.';
-        });
-
-        socket.on('connected', (message) => {
-            qrCodeDisplay.innerHTML = '<i class="fas fa-check-circle fa-3x" style="color: #25d366;"></i>';
-            qrStatus.innerHTML = `<b>${message}</b>`;
-            generateQrBtn.disabled = false;
-            socket.disconnect();
-        });
-        
-        socket.on('error', (message) => {
-            qrCodeDisplay.innerHTML = '<i class="fas fa-times-circle fa-3x" style="color: #ff3b30;"></i>';
-            qrStatus.innerText = message;
-            generateQrBtn.disabled = false;
-            socket.disconnect();
-        });
-
-        socket.on('disconnected', (message) => {
-            qrCodeDisplay.innerHTML = '';
-            qrStatus.innerText = message;
-            generateQrBtn.disabled = false;
-        });
     });
   </script>
 </body>
